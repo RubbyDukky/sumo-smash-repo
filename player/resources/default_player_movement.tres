@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PlayerMovementData" load_steps=2 format=3 uid="uid://coycrccv8y0bl"]
+
+[ext_resource type="Script" path="res://player/resources/player_movement_data.gd" id="1_jusud"]
+
+[resource]
+script = ExtResource("1_jusud")
+run_speed = 150.0
+air_speed = 150.0
+acceleration = 3000.0
+decceleration = 2000.0
+air_acceleration = 1000.0
+air_decceleration = 100.0
+gravity = 800.0
+floating_scale = 0.75
+jump_speed = 350.0
+terminal_velocity = 250.0
+jump_buffer_time = 0.2
