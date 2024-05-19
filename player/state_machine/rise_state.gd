@@ -5,30 +5,40 @@ extends State
 @onready var jump_buffer_timer: Timer = player.get_node("JumpBufferTimer")
 @onready var drop_buffer_timer: Timer = player.get_node("DropBufferTimer")
 @onready var land_sound: AudioStreamPlayer2D = player.get_node("LandSound")
+@onready var bounce_sound: AudioStreamPlayer2D = player.get_node("BounceSound")
 
 
 func on_physics_process(delta: float) -> void:
+	var prev_velocity_y = player.velocity.y
+	var prev_velocity_x = player.velocity.x
+	
 	var direction = get_movement_axis()
-	# apply acceleration
-	if direction:
-		player.velocity.x = move_toward(player.velocity.x, player.air_speed * direction, player.air_acceleration * delta)
-	else:
-		player.velocity.x = move_toward(player.velocity.x, 0.0, player.air_decceleration * delta)
+	
+	# apply decceleration
+	player.velocity.x = move_toward(player.velocity.x, 0.0, player.air_decceleration * delta)
 	
 	# apply gravity
 	if player.velocity.y < player.terminal_velocity:
 		player.velocity.y += player.gravity * delta
 	
-	var prev_velocity_y = player.velocity.y
+	var was_on_wall = player.is_on_wall()
 	
 	player.move_and_slide()
 	
-	# flip sprite
-	if direction:
-		animated_sprite_2d.flip_h = (direction < 0.0)
+	if player.velocity.y > 0.0:
+		player.imaginary_downward_speed += 0.1
 	
 	# transition to fall
 	if player.velocity.y > player.terminal_velocity * 0.7:
+		transition.emit("Fall")
+	# handle ceiling bounce, transition to fall
+	if (player.is_on_ceiling() and prev_velocity_y < -150.0
+			and get_bounce_input()):
+		bounce_sound.set_volume_db(-8.0 + player.imaginary_downward_speed / 2)
+		bounce_sound.set_pitch_scale(1.4 - player.imaginary_downward_speed / 50)
+		bounce_sound.play()
+		player.velocity.y = min(player.terminal_velocity, -prev_velocity_y)
+		player.bounce_height = player.global_position.y
 		transition.emit("Fall")
 	# transition to idle
 	elif player.is_on_floor() and !direction:
@@ -43,6 +53,23 @@ func on_physics_process(delta: float) -> void:
 			land_sound.play()
 		transition.emit("Run")
 	
+	if player.is_on_wall() and !was_on_wall:
+		# transition to bounce wall
+		if get_bounce_input():
+			player.velocity.x = -prev_velocity_x
+			animated_sprite_2d.flip_h = (player.velocity.x < 0.0)
+			bounce_sound.set_volume_db(-8.0 + player.imaginary_downward_speed / 2)
+			bounce_sound.set_pitch_scale(1.4 - player.imaginary_downward_speed / 50)
+			bounce_sound.play()
+			transition.emit("BounceWall")
+		# transition to wall slam
+		else:
+			player.velocity.y *= 0.6
+			if abs(prev_velocity_x) > 100.0:
+				player.camera.apply_shake(abs(prev_velocity_x) / 75)
+				land_sound.play()
+				transition.emit("WallSlam")
+	
 	# handle jump buffer
 	if get_jump_input_just_pressed() and !player.jump_buffer:
 		player.jump_buffer = true
@@ -50,7 +77,8 @@ func on_physics_process(delta: float) -> void:
 		jump_buffer_timer.start()
 	
 	# handle drop buffer
-	if get_drop_input_just_pressed() and !player.drop_buffer:
+	if (get_crouch_input() and get_jump_input_just_pressed()
+			and !player.drop_buffer):
 		player.drop_buffer = true
 		player.jump_buffer = false
 		drop_buffer_timer.start()

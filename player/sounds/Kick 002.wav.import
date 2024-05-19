@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bpoapuxcpb4x3"
+path="res://.godot/imported/Kick 002.wav-61f749045a99be0c55686d2737626106.sample"
+
+[deps]
+
+source_file="res://player/sounds/Kick 002.wav"
+dest_files=["res://.godot/imported/Kick 002.wav-61f749045a99be0c55686d2737626106.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

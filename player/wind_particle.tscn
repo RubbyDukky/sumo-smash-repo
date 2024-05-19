@@ -1,0 +1,77 @@
+[gd_scene load_steps=13 format=3 uid="uid://bk3totyxlaol8"]
+
+[ext_resource type="Texture2D" uid="uid://cf7416ejt3bos" path="res://player/sprite/wind_particle1.png" id="1_y627h"]
+[ext_resource type="Texture2D" uid="uid://c4jqiwyt1gvu3" path="res://player/sprite/wind_particle2.png" id="2_7d325"]
+[ext_resource type="Texture2D" uid="uid://cqg2e26a1k30i" path="res://player/sprite/wind_particle3.png" id="3_jvhya"]
+[ext_resource type="Texture2D" uid="uid://gwvq2ee8dfqr" path="res://player/sprite/wind_particle4.png" id="4_q7u80"]
+[ext_resource type="Script" path="res://wind_particle.gd" id="5_dhfp6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tth8m"]
+atlas = ExtResource("1_y627h")
+region = Rect2(0, 0, 4, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rsuys"]
+atlas = ExtResource("1_y627h")
+region = Rect2(4, 0, 4, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovqv2"]
+atlas = ExtResource("2_7d325")
+region = Rect2(0, 0, 4, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82q4i"]
+atlas = ExtResource("2_7d325")
+region = Rect2(4, 0, 4, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gr7qi"]
+atlas = ExtResource("3_jvhya")
+region = Rect2(0, 0, 3, 4)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_667s2"]
+atlas = ExtResource("4_q7u80")
+region = Rect2(0, 0, 3, 4)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6h4gx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tth8m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rsuys")
+}],
+"loop": true,
+"name": &"particle1",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovqv2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_82q4i")
+}],
+"loop": true,
+"name": &"particle2",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gr7qi")
+}],
+"loop": false,
+"name": &"particle3",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_667s2")
+}],
+"loop": false,
+"name": &"particle4",
+"speed": 0.0
+}]
+
+[node name="WindParticle" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_6h4gx")
+animation = &"particle3"
+script = ExtResource("5_dhfp6")

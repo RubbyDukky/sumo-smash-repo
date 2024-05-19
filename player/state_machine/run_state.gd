@@ -24,14 +24,14 @@ func on_physics_process(delta: float) -> void:
 	# transition to rise
 	elif !player.is_on_floor():
 		transition.emit("Rise")
-	# transition to jump down
-	if (player.is_on_floor() and player.one_way_platform_body
-			and (get_drop_input() or player.drop_buffer)):
-		transition.emit("JumpDown")
+	# transition to crouch
+	if player.is_on_floor() and get_crouch_input():
+		transition.emit("Crouch")
 
 
 func enter() -> void:
 	animated_sprite_2d.play("run")
+	player.imaginary_downward_speed = 1.0
 
 
 func exit() -> void:

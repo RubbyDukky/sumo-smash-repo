@@ -27,16 +27,16 @@ func get_movement_axis():
 
 
 func get_jump_input():
-	return Input.is_action_pressed("jump") and !Input.is_action_pressed("down")
+	return Input.is_action_pressed("jump")
 
 
 func get_jump_input_just_pressed():
-	return Input.is_action_just_pressed("jump") and !Input.is_action_pressed("down")
+	return Input.is_action_just_pressed("jump")
 
 
-func get_drop_input():
-	return Input.is_action_pressed("jump") and Input.is_action_pressed("down")
+func get_crouch_input():
+	return Input.is_action_pressed("down")
 
 
-func get_drop_input_just_pressed():
-	return Input.is_action_just_pressed("jump") and Input.is_action_pressed("down")
+func get_bounce_input():
+	return Input.is_action_pressed("bounce")

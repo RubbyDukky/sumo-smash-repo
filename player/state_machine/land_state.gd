@@ -29,7 +29,8 @@ func on_physics_process(delta: float) -> void:
 		jump_buffer_timer.start()
 	
 	# handle drop buffer
-	if get_drop_input_just_pressed() and !player.drop_buffer:
+	if (get_crouch_input() and get_jump_input_just_pressed()
+			 and !player.drop_buffer):
 		player.drop_buffer = true
 		player.jump_buffer = false
 		drop_buffer_timer.start()
@@ -37,6 +38,7 @@ func on_physics_process(delta: float) -> void:
 
 func enter() -> void:
 	animated_sprite_2d.play("land")
+	player.imaginary_downward_speed = 1.0
 
 
 func exit() -> void:
